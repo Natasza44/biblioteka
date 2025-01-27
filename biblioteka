@@ -1,0 +1,1033 @@
+CREATE DATABASE Biblioteka
+
+
+--tworzenie tabel
+CREATE TABLE Biblioteka_Adres
+(
+    Adres_ID INT PRIMARY KEY,
+    Ulica VARCHAR(50),
+    Numer VARCHAR(10),
+    Miasto VARCHAR(50),
+    Kod_pocztowy VARCHAR(10)
+);
+
+INSERT INTO Biblioteka_Adres
+    (Adres_ID, Ulica, Numer, Miasto, Kod_pocztowy)
+VALUES
+    (1, 'Krakowska', '12', 'Kraków', '31-000'),
+    (2, 'Warszawska', '45A', 'Warszawa', '00-123'),
+    (3, 'Słoneczna', '9', 'Gdańsk', '80-001'),
+    (4, 'Świętokrzyska', '21B', 'Lublin', '20-400'),
+    (5, 'Długa', '3', 'Poznań', '60-101');
+
+CREATE TABLE Biblioteka
+(
+    Biblioteka_ID INT IDENTITY (1,1) PRIMARY KEY NOT NULL,
+    Nazwa_biblioteki VARCHAR(50),
+    Adres_ID INT NOT NULL,
+    FOREIGN KEY (Adres_ID) REFERENCES Biblioteka_Adres(Adres_ID),
+    Rok_założenia INT
+);
+
+INSERT INTO Biblioteka
+    (Nazwa_biblioteki, Adres_ID, Rok_założenia)
+VALUES
+    ('Biblioteka Miejska Kraków', 1, 1975),
+    ('Biblioteka Warszawska', 2, 1980),
+    ('Biblioteka Gdańska', 3, 1960),
+    ('Biblioteka Lubelska', 4, 1990),
+    ('Biblioteka Poznańska', 5, 2000);
+
+CREATE TABLE Gatunek_Książki
+(
+    Gatunek_ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    Nazwa_gatunku VARCHAR(100) NOT NULL,
+    Opis VARCHAR(255) NOT NULL
+);
+
+INSERT INTO Gatunek_Książki
+    (Nazwa_gatunku, Opis)
+VALUES
+    ('Fantasy', 'Literatura o tematyce magicznej i nadprzyrodzonej.'),
+    ('Kryminał', 'Literatura detektywistyczna lub o zbrodniach.'),
+    ('Science Fiction', 'Literatura o przyszłości, nauce i technologii.'),
+    ('Popularnonaukowa', 'Literatura wyjaśniająca zagadnienia naukowe.'),
+    ('Klasyka', 'Utwory kanoniczne w historii literatury.'),
+    ('Romans', 'Literatura o tematyce miłosnej.'),
+    ('Dystopia', 'Opowieści o niepożądanych wizjach przyszłości.'),
+    ('Horror', 'Literatura o tematyce grozy.'),
+    ('Biografia', 'Życiorysy osób, autentyczne lub fabularyzowane.'),
+    ('Przygoda', 'Literatura o podróżach i ekscytujących wydarzeniach.');
+
+CREATE TABLE Pracownicy
+(
+    Pracownik_ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    Imię VARCHAR(50) NOT NULL,
+    Nazwisko VARCHAR(50) NOT NULL,
+    Data_zatrudnienia DATE NOT NULL,
+    Stanowisko VARCHAR(50) NOT NULL,
+    Biblioteka_ID INT NOT NULL,
+    FOREIGN KEY (Biblioteka_ID) REFERENCES Biblioteka(Biblioteka_ID)
+);
+
+INSERT INTO Pracownicy
+    (Imię, Nazwisko, Data_zatrudnienia, Stanowisko, Biblioteka_ID)
+VALUES
+    ('Anna', 'Nowak', '2021-01-15', 'Bibliotekarz', 1),
+    ('Piotr', 'Kowalski', '2020-05-10', 'Administrator', 2),
+    ('Maria', 'Wiśniewska', '2019-09-23', 'Bibliotekarz', 3),
+    ('Jan', 'Zieliński', '2022-11-01', 'Kierownik', 4),
+    ('Katarzyna', 'Kamińska', '2021-08-30', 'Stażysta', 5),
+    ('Michał', 'Lewandowski', '2023-03-15', 'Bibliotekarz', 1),
+    ('Monika', 'Kozłowska', '2021-07-20', 'Bibliotekarz', 2),
+    ('Krzysztof', 'Woźniak', '2020-12-10', 'Administrator', 3),
+    ('Barbara', 'Mazur', '2022-02-05', 'Stażysta', 4),
+    ('Tomasz', 'Krawczyk', '2021-04-17', 'Bibliotekarz', 5),
+    ('Joanna', 'Zielińska', '2020-10-19', 'Kierownik', 1),
+    ('Adam', 'Szymański', '2023-06-07', 'Stażysta', 2),
+    ('Justyna', 'Wójcik', '2022-09-25', 'Administrator', 3),
+    ('Łukasz', 'Kaczmarek', '2019-12-13', 'Bibliotekarz', 4),
+    ('Zofia', 'Baran', '2021-02-14', 'Bibliotekarz', 5);
+
+CREATE TABLE Czytelnik
+(
+    Czytelnik_ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    Imię VARCHAR(50) NOT NULL,
+    Nazwisko VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    Telefon VARCHAR(15) NOT NULL,
+    Data_rejestracji DATE NOT NULL
+);
+
+INSERT INTO Czytelnik
+    (Imię, Nazwisko, Email, Telefon, Data_rejestracji)
+VALUES
+    ('Jan', 'Kowalski', 'jan.kowalski@example.pl', '600123456', '2021-02-10'),
+    ('Anna', 'Nowak', 'anna.nowak@example.pl', '601234567', '2021-03-15'),
+    ('Piotr', 'Wiśniewski', 'piotr.wisniewski@wp.pl', '602345678', '2022-01-20'),
+    ('Maria', 'Kamińska', 'maria.kaminska@gmail.com', '603456789', '2022-02-25'),
+    ('Krzysztof', 'Lewandowski', 'krzysztof.lewa@o2.pl', '604567890', '2023-03-05'),
+    ('Joanna', 'Zielińska', 'joanna.zielinska@wp.pl', '605678901', '2021-04-10'),
+    ('Tomasz', 'Wójcik', 'tom.wójcik@outlook.com', '606789012', '2021-05-15'),
+    ('Katarzyna', 'Baran', 'katarzyna.baran@onet.pl', '607890123', '2022-06-20'),
+    ('Adam', 'Szymański', 'adam.szymanski@interia.pl', '608901234', '2022-07-25'),
+    ('Weronika', 'Majewska', 'weronika.majewska@wp.pl', '609012345', '2022-08-30'),
+    ('Grzegorz', 'Malinowski', 'grzegorz.malinowski@o2.pl', '600111222', '2021-09-15'),
+    ('Paweł', 'Dąbrowski', 'pawel.dabrowski@onet.pl', '601222333', '2021-10-10'),
+    ('Magdalena', 'Król', 'magda.krol@gmail.com', '602333444', '2023-02-25'),
+    ('Aleksander', 'Błaszczyk', 'aleksander.b@wp.pl', '603444555', '2023-03-15'),
+    ('Zuzanna', 'Czarnecka', 'zuzanna.cz@o2.pl', '604555666', '2022-04-01'),
+    ('Karol', 'Lisowski', 'karol.lis@interia.pl', '605666777', '2022-06-05'),
+    ('Emilia', 'Tomaszewska', 'emilia.tomaszewska@onet.pl', '606777888', '2023-08-12'),
+    ('Jakub', 'Piątek', 'jakub.piatek@gmail.com', '607888999', '2022-09-25'),
+    ('Julia', 'Nowicka', 'julia.nowicka@interia.pl', '608999000', '2021-12-30'),
+    ('Artur', 'Kubiak', 'artur.kubiak@wp.pl', '609000111', '2021-07-01'),
+    ('Ewa', 'Sawicka', 'ewa.sawicka@o2.pl', '600123987', '2023-01-15'),
+    ('Michał', 'Kędziora', 'michal.kedziora@wp.pl', '601456789', '2023-02-20'),
+    ('Patrycja', 'Pawlak', 'patrycja.p@onet.pl', '602789123', '2021-04-12'),
+    ('Sebastian', 'Musiał', 'sebastian.musial@interia.pl', '603123654', '2022-03-18'),
+    ('Natalia', 'Wawrzyniak', 'natalia.wawrzyniak@onet.pl', '604321987', '2021-05-22'),
+    ('Dominik', 'Górecki', 'dominik.gorecki@wp.pl', '605654321', '2022-11-11'),
+    ('Paulina', 'Mazurek', 'paulina.mazurek@gmail.com', '606987654', '2023-06-09'),
+    ('Adrian', 'Szczepański', 'adrian.szczepanski@wp.pl', '607345678', '2022-12-20'),
+    ('Kamila', 'Markiewicz', 'kamila.markiewicz@o2.pl', '608234567', '2021-09-15'),
+    ('Łukasz', 'Borowski', 'lukasz.borowski@wp.pl', '609876543', '2022-10-28'),
+    ('Dorota', 'Kalinowska', 'dorota.kalinowska@o2.pl', '600345876', '2023-03-01'),
+    ('Igor', 'Walczak', 'igor.walczak@gmail.com', '601654789', '2022-05-15'),
+    ('Kinga', 'Chmielewska', 'kinga.chmielewska@wp.pl', '602765432', '2022-08-22'),
+    ('Bartosz', 'Sobczak', 'bartosz.sobczak@o2.pl', '603432765', '2023-07-13'),
+    ('Agnieszka', 'Borkowska', 'agnieszka.borkowska@gmail.com', '604765123', '2021-10-05'),
+    ('Rafał', 'Tomasik', 'rafal.tomasik@wp.pl', '605897321', '2023-02-25'),
+    ('Milena', 'Rutkowska', 'milena.rutkowska@o2.pl', '606312987', '2022-11-02'),
+    ('Marcin', 'Wróbel', 'marcin.wrobel@interia.pl', '607432156', '2023-03-07'),
+    ('Alicja', 'Gajewska', 'alicja.gajewska@onet.pl', '608654789', '2021-06-18'),
+    ('Damian', 'Sadowski', 'damian.sadowski@o2.pl', '609312456', '2022-09-09'),
+    ('Izabela', 'Urbaniak', 'izabela.urbaniak@gmail.com', '600111333', '2022-12-12'),
+    ('Filip', 'Kasprzyk', 'filip.kasprzyk@wp.pl', '601222444', '2021-07-19'),
+    ('Sylwia', 'Górska', 'sylwia.gorska@o2.pl', '602333555', '2022-10-15'),
+    ('Wojciech', 'Zawadzki', 'wojciech.zawadzki@onet.pl', '603444666', '2023-01-10'),
+    ('Martyna', 'Żurawska', 'martyna.zurawska@wp.pl', '604555777', '2021-08-25'),
+    ('Mateusz', 'Świątek', 'mateusz.swiatek@o2.pl', '605666888', '2023-06-21'),
+    ('Aleksandra', 'Bednarek', 'aleksandra.bednarek@gmail.com', '606777999', '2022-05-30'),
+    ('Arkadiusz', 'Orłowski', 'arkadiusz.orlowski@wp.pl', '607888000', '2022-07-27'),
+    ('Elżbieta', 'Bagińska', 'elzbieta.baginska@onet.pl', '608999111', '2023-02-14'),
+    ('Krystian', 'Kaźmierczak', 'krystian.kazmierczak@gmail.com', '609000222', '2023-03-08'),
+    ('Dorota', 'Czajka', 'dorota.czajka@o2.pl', '600111444', '2022-08-17');
+
+CREATE TABLE Logowanie
+(
+    Logowanie_ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    Hasło VARCHAR(50) NOT NULL,
+    Liczba_zalogowań INT NOT NULL DEFAULT 0,
+    Czytelnik_ID INT NOT NULL,
+    FOREIGN KEY (Czytelnik_ID) REFERENCES Czytelnik(Czytelnik_ID)
+);
+
+INSERT INTO Logowanie
+    (Email, Hasło, Liczba_zalogowań, Czytelnik_ID)
+VALUES
+    ('jan.kowalski@example.pl', '4gne9JE8Jxsb', 20, 1),
+    ('anna.nowak@example.pl', 'FGGv6fIQ1aco', 14, 2),
+    ('piotr.wisniewski@wp.pl', 'Kbdf1mIp09ty', 8, 3),
+    ('maria.kaminska@gmail.com', '8mtpQlU7RlRN', 0, 4),
+    ('krzysztof.lewa@o2.pl', 'LD1nl8rdD8Uh', 13, 5),
+    ('joanna.zielinska@wp.pl', 'qiHhpCkGWSxT', 21, 6),
+    ('tom.wójcik@outlook.com', 'vdAQFeXiJPUy', 13, 7),
+    ('katarzyna.baran@onet.pl', 'vfD2RQuASL8r', 11, 8),
+    ('adam.szymanski@interia.pl', 'exSOBL03Ph1H', 0, 9),
+    ('weronika.majewska@wp.pl', '7bYjkvXbOSwK', 23, 10),
+    ('grzegorz.malinowski@o2.pl', '9rzGhxBkfSwR', 11, 11),
+    ('pawel.dabrowski@onet.pl', 'MJh8YbjNn54z', 5, 12),
+    ('magda.krol@gmail.com', '1LZgxhdLBHOT', 19, 13),
+    ('aleksander.b@wp.pl', 'WtVcgQmppHXa', 5, 14),
+    ('zuzanna.cz@o2.pl', 'OZCxtigDx9PW', 11, 15),
+    ('karol.lis@interia.pl', 'Xfw7zkPE4Omo', 3, 16),
+    ('emilia.tomaszewska@onet.pl', 'FHqWSPKty8RY', 22, 17),
+    ('jakub.piatek@gmail.com', 'fqcclLfWe9EB', 18, 18),
+    ('julia.nowicka@interia.pl', 'dpzE2Tg9wXrm', 21, 19),
+    ('artur.kubiak@wp.pl', '2JuhygiYNYcJ', 9, 20),
+    ('ewa.sawicka@o2.pl', 'IwdtsPKGCp3n', 16, 21),
+    ('michal.kedziora@wp.pl', 'aF0fcSlH80kb', 9, 22),
+    ('patrycja.p@onet.pl', 'a8i7bpyFMq6F', 9, 23),
+    ('sebastian.musial@interia.pl', 'zwRhMljNQHHt', 3, 24),
+    ('natalia.wawrzyniak@onet.pl', 'pD65xVKSMBTt', 16, 25),
+    ('dominik.gorecki@wp.pl', 'rMpX1xbtIvpq', 5, 26),
+    ('paulina.mazurek@gmail.com', 'BE4XQXKT1ySY', 0, 27),
+    ('adrian.szczepanski@wp.pl', 't3R1fo3ydhzA', 15, 28),
+    ('kamila.markiewicz@o2.pl', '5LVcpXk4XQ4t', 13, 29),
+    ('lukasz.borowski@wp.pl', 'axBy0A224Ro8', 17, 30),
+    ('dorota.kalinowska@o2.pl', 'gkNd10MdO4bE', 18, 31),
+    ('igor.walczak@gmail.com', 'BsneNYAd9ias', 15, 32),
+    ('kinga.chmielewska@wp.pl', 'nF7cp7GohX6F', 22, 33),
+    ('bartosz.sobczak@o2.pl', 'KHChDaegV6xI', 14, 34),
+    ('agnieszka.borkowska@gmail.com', 'XYofRL87Jf0w', 22, 35),
+    ('rafal.tomasik@wp.pl', '2uyRxxhnvhUG', 5, 36),
+    ('milena.rutkowska@o2.pl', 'VcaiD4WqRzFR', 7, 37),
+    ('marcin.wrobel@interia.pl', 'SkXWY85oQQoT', 2, 38),
+    ('alicja.gajewska@onet.pl', 'lNsiZJWzEiKy', 3, 39),
+    ('damian.sadowski@o2.pl', 'ua4PIJeDoh8N', 5, 40),
+    ('izabela.urbaniak@gmail.com', 'ZKOwlp0EyH6z', 5, 41),
+    ('filip.kasprzyk@wp.pl', 'LyRIcQNuZjl8', 16, 42),
+    ('sylwia.gorska@o2.pl', 'EpgGwkoEPfIP', 2, 43),
+    ('wojciech.zawadzki@onet.pl', '4kNZrG9ndEEU', 13, 44),
+    ('martyna.zurawska@wp.pl', '2VlYUOx0iQr6', 0, 45),
+    ('mateusz.swiatek@o2.pl', 'ItSOc1kqpCO2', 22, 46),
+    ('aleksandra.bednarek@gmail.com', 'CyCTj7eAlMOa', 5, 47),
+    ('arkadiusz.orlowski@wp.pl', '8QuArSqn2RQ8', 23, 48),
+    ('elzbieta.baginska@onet.pl', 'yvLleXp0HtVg', 13, 49),
+    ('krystian.kazmierczak@gmail.com', 'MdQkvrU6e1PM', 22, 50),
+    ('dorota.czajka@o2.pl', 'Hj9WVk9vhDfx', 0, 51);
+
+CREATE TABLE Książka
+(
+    Książka_ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    Tytuł VARCHAR(255) NOT NULL,
+    Autor VARCHAR(255) NOT NULL,
+    Gatunek_ID INT NOT NULL,
+    FOREIGN KEY (Gatunek_ID) REFERENCES Gatunek_Książki(Gatunek_ID),
+    Rok_wydania INT,
+    Biblioteka_ID INT,
+    FOREIGN KEY (Biblioteka_ID) REFERENCES Biblioteka(Biblioteka_ID)
+);
+
+INSERT INTO Książka
+    (Tytuł, Autor, Gatunek_ID, Rok_wydania, Biblioteka_ID)
+VALUES
+    ('Władca Pierścieni', 'J.R.R. Tolkien', 1, 1954, 1),
+    ('Harry Potter i Kamień Filozoficzny', 'J.K. Rowling', 1, 1997, 1),
+    ('Zbrodnia i kara', 'F. Dostojewski', 2, 1866, 2),
+    ('Dracula', 'Bram Stoker', 8, 1897, 3),
+    ('1984', 'George Orwell', 7, 1949, 3),
+    ('Hobbit', 'J.R.R. Tolkien', 1, 1937, 1),
+    ('Lalka', 'Bolesław Prus', 5, 1890, 4),
+    ('Ojciec chrzestny', 'Mario Puzo', 2, 1969, 5),
+    ('Kod Leonarda da Vinci', 'Dan Brown', 2, 2003, 5),
+    ('Mały Książę', 'Antoine de Saint-Exupéry', 1, 1943, 3),
+    ('Duma i uprzedzenie', 'Jane Austen', 5, 1813, 4),
+    ('Wiedźmin: Ostatnie życzenie', 'Andrzej Sapkowski', 1, 1993, 1),
+    ('Pan Tadeusz', 'Adam Mickiewicz', 5, 1834, 2),
+    ('Cień wiatru', 'Carlos Ruiz Zafón', 5, 2001, 3),
+    ('Folwark zwierzęcy', 'George Orwell', 7, 1945, 3),
+    ('Krzyżacy', 'Henryk Sienkiewicz', 5, 1900, 4),
+    ('W pustyni i w puszczy', 'Henryk Sienkiewicz', 5, 1911, 4),
+    ('Solaris', 'Stanisław Lem', 7, 1961, 5),
+    ('Rok 1984', 'George Orwell', 7, 1949, 3),
+    ('Czarnoksiężnik z Archipelagu', 'Ursula K. Le Guin', 1, 1968, 5),
+    ('Lot nad kukułczym gniazdem', 'Ken Kesey', 7, 1962, 2),
+    ('Gra o tron', 'George R.R. Martin', 1, 1996, 1),
+    ('Pięćdziesiąt twarzy Greya', 'E.L. James', 5, 2011, 2),
+    ('Obcy', 'Albert Camus', 7, 1942, 2),
+    ('Lolita', 'Vladimir Nabokov', 5, 1955, 4),
+    ('Alchemik', 'Paulo Coelho', 5, 1988, 1),
+    ('Mistrz i Małgorzata', 'Michaił Bułhakow', 5, 1966, 3),
+    ('To', 'Stephen King', 8, 1986, 3),
+    ('Carrie', 'Stephen King', 8, 1974, 3),
+    ('Zielona mila', 'Stephen King', 7, 1996, 3),
+    ('Szklany klosz', 'Sylvia Plath', 5, 1963, 4),
+    ('Fahrenheit 451', 'Ray Bradbury', 7, 1953, 5),
+    ('Frankenstein', 'Mary Shelley', 8, 1818, 4),
+    ('Don Kichot', 'Miguel de Cervantes', 5, 1605, 2),
+    ('Hamlet', 'William Shakespeare', 5, 1603, 3),
+    ('Romeo i Julia', 'William Shakespeare', 5, 1597, 4),
+    ('Makbet', 'William Shakespeare', 5, 1606, 3),
+    ('Zew Cthulhu', 'H.P. Lovecraft', 8, 1928, 1),
+    ('Księga Dżungli', 'Rudyard Kipling', 5, 1894, 2),
+    ('Sto lat samotności', 'Gabriel Garcia Marquez', 5, 1967, 5),
+    ('Szachinszach', 'Ryszard Kapuściński', 5, 1982, 4),
+    ('Władca much', 'William Golding', 7, 1954, 4),
+    ('Powrót króla', 'J.R.R. Tolkien', 1, 1955, 1),
+    ('Dzieci Hurina', 'J.R.R. Tolkien', 1, 2007, 1),
+    ('Bracia Karamazow', 'Fiodor Dostojewski', 2, 1880, 2),
+    ('Krótka historia czasu', 'Stephen Hawking', 4, 1988, 4),
+    ('Baśnie', 'Hans Christian Andersen', 1, 1837, 5),
+    ('Nędznicy', 'Victor Hugo', 5, 1862, 4),
+    ('Kraina lodu', 'Disney Studios', 1, 2013, 1),
+    ('Sztuka wojny', 'Sun Tzu', 4, -500, 5),
+    ('Hobbit 2', 'J.R.R. Tolkien', 1, 1937, 1),
+    ('Metro 2033', 'Dmitrij Głuchowski', 3, 2005, 2),
+    ('Blade Runner: Czy androidy marzą o elektrycznych owcach?', 'Philip K. Dick', 3, 1968, 3),
+    ('Człowiek w wysokim zamku', 'Philip K. Dick', 7, 1962, 2),
+    ('Świat Zofii', 'Jostein Gaarder', 4, 1991, 4),
+    ('Świat według Garpa', 'John Irving', 5, 1978, 5),
+    ('Mechaniczna pomarańcza', 'Anthony Burgess', 7, 1962, 3),
+    ('Pod kopułą', 'Stephen King', 8, 2009, 4),
+    ('Drakula', 'Bram Stoker', 8, 1897, 5),
+    ('Czerwony smok', 'Thomas Harris', 2, 1981, 1),
+    ('Milczenie owiec', 'Thomas Harris', 2, 1988, 2),
+    ('Igrzyska śmierci', 'Suzanne Collins', 7, 2008, 3),
+    ('W pierścieniu ognia', 'Suzanne Collins', 7, 2009, 3),
+    ('Kosogłos', 'Suzanne Collins', 7, 2010, 3),
+    ('Czarna seria: Dziewczyna z tatuażem', 'Stieg Larsson', 2, 2005, 4),
+    ('Dziewczyna, która igrała z ogniem', 'Stieg Larsson', 2, 2006, 4),
+    ('Dziewczyna, która kopnęła gniazdo os', 'Stieg Larsson', 2, 2007, 4),
+    ('Serce ciemności', 'Joseph Conrad', 5, 1899, 5),
+    ('Odyseja', 'Homer', 5, -800, 1),
+    ('Iliada', 'Homer', 5, -750, 1),
+    ('Dziesięciu murzynków', 'Agatha Christie', 2, 1939, 2),
+    ('Zabójstwo Rogera Ackroyda', 'Agatha Christie', 2, 1926, 2),
+    ('Tajemnica Bladego Konia', 'Agatha Christie', 2, 1961, 3),
+    ('Zbrodnia i kara (cz.2)', 'Fiodor Dostojewski', 5, 1866, 4),
+    ('Władca pierścieni: Drużyna Pierścienia', 'J.R.R. Tolkien', 1, 1954, 1),
+    ('Władca pierścieni: Dwie wieże', 'J.R.R. Tolkien', 1, 1954, 1),
+    ('Śmierć pięknych saren', 'Ota Pavel', 9, 1971, 3),
+    ('Czarnoksiężnik z Krainy Oz', 'L. Frank Baum', 1, 1900, 5),
+    ('Dzieci z Bullerbyn', 'Astrid Lindgren', 10, 1947, 5),
+    ('Mała Syrenka', 'Hans Christian Andersen', 1, 1837, 5);
+
+CREATE TABLE Egzemplarz
+(
+    Egzemplarz_ID INT PRIMARY KEY NOT NULL,
+    Książka_ID INT,
+    FOREIGN KEY (Książka_ID) REFERENCES Książka(Książka_ID),
+    Biblioteka_ID INT,
+    FOREIGN KEY (Biblioteka_ID) REFERENCES Biblioteka(Biblioteka_ID)
+);
+
+INSERT INTO egzemplarz
+    (Egzemplarz_ID, Książka_ID, Biblioteka_ID)
+VALUES
+    (1, 1, 3),
+    (2, 1, 1),
+    (3, 1, 4),
+    (4, 2, 5),
+    (5, 2, 2),
+    (6, 3, 4),
+    (7, 3, 2),
+    (8, 4, 1),
+    (9, 4, 5),
+    (10, 4, 3),
+    (11, 5, 1),
+    (12, 5, 2),
+    (13, 6, 3),
+    (14, 6, 1),
+    (15, 7, 4),
+    (16, 7, 2),
+    (17, 8, 5),
+    (18, 8, 1),
+    (19, 9, 4),
+    (20, 9, 2),
+    (21, 10, 3),
+    (22, 10, 1),
+    (23, 11, 5),
+    (24, 11, 4),
+    (25, 12, 2),
+    (26, 12, 1),
+    (27, 13, 3),
+    (28, 13, 5),
+    (29, 14, 1),
+    (30, 14, 2),
+    (31, 15, 3),
+    (32, 15, 4),
+    (33, 16, 2),
+    (34, 16, 5),
+    (35, 17, 1),
+    (36, 17, 4),
+    (37, 18, 2),
+    (38, 18, 3),
+    (39, 19, 4),
+    (40, 19, 1),
+    (41, 20, 2),
+    (42, 20, 3),
+    (43, 21, 1),
+    (44, 21, 5),
+    (45, 22, 4),
+    (46, 22, 3),
+    (47, 23, 2),
+    (48, 23, 1),
+    (49, 24, 5),
+    (50, 24, 3),
+    (51, 25, 1),
+    (52, 25, 2),
+    (53, 26, 4),
+    (54, 26, 3),
+    (55, 27, 1),
+    (56, 27, 5),
+    (57, 28, 4),
+    (58, 28, 3),
+    (59, 29, 2),
+    (60, 29, 1),
+    (61, 30, 5),
+    (62, 30, 3),
+    (63, 31, 2),
+    (64, 31, 4),
+    (65, 32, 1),
+    (66, 32, 5),
+    (67, 33, 3),
+    (68, 33, 4),
+    (69, 34, 2),
+    (70, 34, 1),
+    (71, 35, 3),
+    (72, 35, 5),
+    (73, 36, 1),
+    (74, 36, 2),
+    (75, 37, 4),
+    (76, 37, 3),
+    (77, 38, 1),
+    (78, 38, 5),
+    (79, 39, 3),
+    (80, 39, 2),
+    (81, 40, 1),
+    (82, 40, 4),
+    (83, 41, 2),
+    (84, 41, 5),
+    (85, 42, 3),
+    (86, 42, 1),
+    (87, 43, 4),
+    (88, 43, 2),
+    (89, 44, 5),
+    (90, 44, 3),
+    (91, 45, 1),
+    (92, 45, 4),
+    (93, 46, 2),
+    (94, 46, 3),
+    (95, 47, 1),
+    (96, 47, 4),
+    (97, 48, 5),
+    (98, 48, 2),
+    (99, 49, 3),
+    (100, 49, 4),
+    (101, 50, 1),
+    (102, 50, 5),
+    (103, 51, 3),
+    (104, 51, 2),
+    (105, 52, 4),
+    (106, 52, 5),
+    (107, 53, 1),
+    (108, 53, 3),
+    (109, 54, 4),
+    (110, 54, 2),
+    (111, 55, 1),
+    (112, 55, 5),
+    (113, 56, 3),
+    (114, 56, 4),
+    (115, 57, 2),
+    (116, 57, 1),
+    (117, 58, 5),
+    (118, 58, 4),
+    (119, 59, 3),
+    (120, 59, 1),
+    (121, 60, 4),
+    (122, 60, 5),
+    (123, 61, 2),
+    (124, 61, 3),
+    (125, 62, 1),
+    (126, 62, 5),
+    (127, 63, 2),
+    (128, 63, 4),
+    (129, 64, 3),
+    (130, 64, 5),
+    (131, 65, 1),
+    (132, 65, 2),
+    (133, 66, 3),
+    (134, 66, 4),
+    (135, 67, 5),
+    (136, 67, 1),
+    (137, 68, 4),
+    (138, 68, 2),
+    (139, 69, 3),
+    (140, 69, 5),
+    (141, 70, 2),
+    (142, 70, 1),
+    (143, 71, 4),
+    (144, 71, 3),
+    (145, 72, 1),
+    (146, 72, 5),
+    (147, 73, 3),
+    (148, 73, 4),
+    (149, 74, 1),
+    (150, 74, 5),
+    (151, 75, 2),
+    (152, 75, 3),
+    (153, 76, 1),
+    (154, 76, 5),
+    (155, 77, 2),
+    (156, 77, 1),
+    (157, 78, 3),
+    (158, 78, 4),
+    (159, 79, 1),
+    (160, 79, 5),
+    (161, 80, 2);
+
+CREATE TABLE Wypożyczenie
+(
+    Wypożyczenie_ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    Czytelnik_ID INT NOT NULL,
+    Książka_ID INT NOT NULL,
+    Egzemplarz_ID INT NOT NULL,
+    Data_wypożyczenia DATE NOT NULL,
+    Data_zwrotu DATE NULL,
+    Biblioteka_ID INT NOT NULL,
+    Pracownik_ID INT NOT NULL,
+    FOREIGN KEY (Pracownik_ID) REFERENCES Pracownicy(Pracownik_ID),
+    FOREIGN KEY (Czytelnik_ID) REFERENCES Czytelnik(Czytelnik_ID),
+    FOREIGN KEY (Książka_ID) REFERENCES Książka(Książka_ID),
+    FOREIGN KEY (Biblioteka_ID) REFERENCES Biblioteka(Biblioteka_ID),
+    FOREIGN KEY (Egzemplarz_ID) REFERENCES Egzemplarz(Egzemplarz_ID)
+);
+
+INSERT INTO Wypożyczenie
+    (Czytelnik_ID, Książka_ID, Egzemplarz_ID, Data_wypożyczenia, Data_zwrotu, Biblioteka_ID, Pracownik_ID)
+VALUES
+    (4, 22, 45, '2021-02-01', '2021-03-01', 4, 14),
+    (15, 60, 121, '2021-04-15', '2021-05-15', 4, 14),
+    (7, 1, 2, '2021-06-01', '2021-06-15', 1, 1),
+    (5, 10, 21, '2021-07-01', '2021-07-20', 3, 3),
+    (20, 33, 67, '2021-09-10', '2021-10-01', 3, 3),
+    (3, 50, 101, '2021-10-15', '2021-11-05', 1, 1),
+    (6, 40, 82, '2021-12-01', '2022-01-01', 4, 14),
+    (12, 17, 36, '2022-01-10', '2022-01-30', 4, 14),
+    (9, 23, 11, '2022-02-01', '2022-03-01', 5, 15),
+    (1, 13, 28, '2022-03-01', '2022-03-25', 5, 15),
+    (11, 61, 62, '2022-04-01', '2022-05-01', 1, 1),
+    (14, 2, 4, '2022-05-01', '2022-05-25', 5, 15),
+    (8, 5, 12, '2022-06-15', '2022-07-15', 2, 7),
+    (17, 8, 18, '2022-07-01', '2022-07-20', 1, 1),
+    (4, 18, 38, '2022-08-01', '2022-09-01', 3, 3),
+    (13, 12, 25, '2022-09-05', '2022-09-20', 2, 7),
+    (7, 15, 32, '2022-10-01', '2022-10-15', 4, 14),
+    (2, 11, 24, '2022-10-10', '2022-11-01', 4, 14),
+    (9, 19, 40, '2022-11-01', '2022-11-20', 1, 1),
+    (18, 4, 9, '2022-12-01', '2023-01-01', 5, 15),
+    (16, 9, 20, '2023-01-15', '2023-02-01', 2, 7),
+    (19, 21, 43, '2023-02-05', '2023-02-25', 1, 1),
+    (12, 28, 58, '2023-03-01', '2023-03-20', 3, 3),
+    (2, 34, 69, '2023-03-10', '2023-04-01', 2, 7),
+    (5, 17, 36, '2023-04-01', '2023-04-20', 4, 14),
+    (10, 6, 13, '2023-05-01', '2023-05-20', 3, 3),
+    (1, 3, 6, '2023-06-01', '2023-06-20', 4, 14),
+    (16, 32, 66, '2023-07-01', '2023-07-15', 5, 15),
+    (6, 26, 54, '2023-07-15', '2023-08-01', 3, 3),
+    (4, 7, 16, '2023-08-05', '2023-08-25', 2, 7),
+    (15, 10, 22, '2023-09-01', '2023-09-20', 1, 1),
+    (3, 1, 2, '2023-10-01', '2023-10-20', 1, 1),
+    (20, 16, 33, '2023-10-15', '2023-11-01', 2, 7),
+    (2, 22, 46, '2023-11-01', '2023-11-20', 3, 3),
+    (9, 24, 50, '2023-11-01', '2023-11-20', 3, 3),
+    (18, 13, 27, '2023-12-01', '2023-12-20', 3, 3),
+    (17, 27, 56, '2023-12-01', '2024-01-01', 5, 15),
+    (13, 29, 60, '2024-01-01', '2024-01-20', 1, 6),
+    (8, 30, 61, '2024-02-01', '2024-02-15', 5, 15),
+    (7, 25, 52, '2024-03-01', '2024-03-20', 2, 7),
+    (6, 11, 24, '2024-04-01', '2024-04-15', 4, 14),
+    (19, 33, 68, '2024-05-01', '2024-05-15', 4, 14),
+    (2, 5, 12, '2024-06-01', '2024-06-15', 2, 7),
+    (16, 20, 41, '2024-07-01', '2024-07-15', 2, 7),
+    (13, 14, 30, '2024-08-01', '2024-08-15', 2, 7),
+    (18, 2, 5, '2024-08-03', '2024-08-09', 2, 7),
+    (17, 26, 53, '2024-10-01', '2024-10-20', 4, 14),
+    (14, 28, 57, '2024-11-01', '2024-11-20', 4, 14),
+    (3, 23, 48, '2024-12-01', '2025-01-01', 1, 1),
+    (9, 19, 40, '2025-01-01', '2025-01-20', 1, 6),
+    (15, 7, 16, '2025-01-01', NULL, 2, 7),
+    (14, 7, 15, '2025-01-01', NULL, 4, 14),
+    (6, 22, 46, '2025-01-02', NULL, 3, 3),
+    (19, 9, 20, '2025-01-03', NULL, 2, 7),
+    (4, 10, 21, '2025-01-04', NULL, 3, 3),
+    (10, 6, 13, '2025-01-05', NULL, 3, 3),
+    (5, 5, 12, '2025-01-06', NULL, 2, 7),
+    (11, 29, 60, '2025-01-11', NULL, 1, 1),
+    (8, 30, 61, '2025-01-12', NULL, 5, 15);
+
+
+--FUNCKCJA Średnia długość wypożyczenia
+SELECT AVG (DATEDIFF (Day,[Data_wypożyczenia],[Data_zwrotu])) AS średnia_długość_wypożyczenia
+FROM [dbo].[Wypożyczenie];
+
+--FUNKCJA Naliczanie kary za przetrzymanie książki
+
+-- Dodanie kolumny 'Cena' do tabeli 'Książka' oraz 'Kara' do tabeli 'Wypożyczenie'
+ALTER TABLE Książka
+ADD Cena DECIMAL(10, 2);
+
+ALTER TABLE Wypożyczenie
+ADD Kara DECIMAL(10, 2) DEFAULT 0;
+
+-- Wypełnienie kolumny 'Cena' losowymi wartościami z przedziału 20-50
+
+DECLARE @Index INT = 1;
+DECLARE @RandomPrice DECIMAL(10, 2);
+
+WHILE @Index <= 80
+BEGIN
+    SET @RandomPrice = ROUND((RAND() * (50 - 20) + 20), 2);
+
+    UPDATE Książka
+    SET Cena = @RandomPrice
+    WHERE Książka_ID = @Index;
+
+    SET @Index = @Index + 1;
+END;
+
+--kara za przetrzymanie książki
+
+GO
+CREATE FUNCTION oblicz_kare (
+    @DataWypozyczenia DATE,
+    @DataZwrotu DATE,
+    @Książka_ID INT
+)
+RETURNS DECIMAL(10, 2)
+AS
+BEGIN
+    DECLARE @DniPrzetrzymania INT;
+    DECLARE @Kara DECIMAL(10, 2);
+    DECLARE @Cena DECIMAL(10, 2);
+
+    -- Pobierz cenę książki na podstawie Książka_ID
+    SELECT @Cena = Cena
+    FROM Książka
+    WHERE Książka_ID = @Książka_ID;
+
+    -- Jeśli DataZwrotu jest NULL, używamy bieżącej daty
+    IF @DataZwrotu IS NULL
+    BEGIN
+        SET @DniPrzetrzymania = DATEDIFF(DAY, @DataWypozyczenia, GETDATE()) - 30;
+    END
+    ELSE
+    BEGIN
+        SET @DniPrzetrzymania = DATEDIFF(DAY, @DataWypozyczenia, @DataZwrotu) - 30;
+    END
+
+    -- Oblicz karę tylko, jeśli dni przetrzymania > 0
+    IF @DniPrzetrzymania > 0
+    BEGIN
+        SET @Kara = @DniPrzetrzymania * (@Cena * 0.01);
+    END
+    ELSE
+    BEGIN
+        SET @Kara = 0;
+    END
+
+    RETURN @Kara;
+END;
+GO
+
+-- TEST - pozycje, które zalegają z oddaniem książki i została im naliczona kara
+SELECT
+    Wypożyczenie_ID,
+    dbo.oblicz_kare(Data_wypożyczenia, Data_zwrotu, Książka_ID) AS Kara
+FROM
+    Wypożyczenie
+WHERE 
+    dbo.oblicz_kare(Data_wypożyczenia, Data_zwrotu, Książka_ID) > 0;
+
+--ZAPYTANIA
+
+--Zapytanie (1)
+--Liczba wypożyczonych książek każdego czytelnika
+SELECT
+    Czytelnik_ID,
+    COUNT(Książka_ID) AS liczba_wypozyczonych_ksiązek
+FROM
+    [dbo].[Wypożyczenie]
+GROUP BY 
+    Czytelnik_ID
+ORDER BY 
+    2 DESC;
+
+--Zapytanie (2)
+-- Książki strasze niż 50 lat
+SELECT
+    *
+FROM
+    [dbo].[Książka]
+WHERE 
+    (YEAR(GETDATE()) - Rok_wydania) > 50;
+
+--Zapytanie (3)
+-- 5 najdrozszych ksiązek
+SELECT TOP 5
+    Książka_ID,
+    Tytuł,
+    Autor,
+    Cena
+FROM
+    Książka
+ORDER BY 
+    Cena DESC;
+
+--Zapytanie (4)
+--Książki wypożyczone przez danego użykownika 'Jan Kowalski'
+SELECT
+    [Tytuł],
+    [Autor],
+    [Imię] + ' ' + [Nazwisko] AS 'Imię i naziwsko'
+FROM
+    [dbo].[Książka] k
+    JOIN [dbo].[Wypożyczenie] w ON w.[Książka_ID] = k.[Książka_ID]
+    JOIN [dbo].[Czytelnik] c ON c.[Czytelnik_ID] = w.[Czytelnik_ID]
+WHERE 
+    c.[Imię] = 'Jan'
+    AND c.[Nazwisko] = 'Kowalski';
+
+-- Zapytanie (5)
+-- Pierwszy zarejestrowany użytkownik
+SELECT TOP 1
+    *
+FROM
+    [dbo].[Czytelnik]
+ORDER BY 
+    [Data_rejestracji];
+
+--PROCEDURA
+
+--Procedura (1) Statystyka wypożyczeń książek za wybrany okres
+
+DECLARE @Data_od DATE
+DECLARE @Data_do DATE
+
+GO
+CREATE PROCEDURE 
+Statystyka_wypożyczeń_za_okres
+    @Data_od DATE,
+    @Data_do DATE
+AS
+SELECT
+    COUNT (*) AS ilosc_wypożyczonych_książek_przez_bilbiotekę,
+    [Nazwa_biblioteki]
+
+FROM
+    [dbo].[Wypożyczenie] W
+    JOIN
+    [dbo].[Biblioteka] b ON b.Biblioteka_ID = w.Biblioteka_ID
+WHERE 
+    [Data_wypożyczenia] BETWEEN @Data_od AND @Data_do
+GROUP BY 
+    b.[Biblioteka_ID], [Nazwa_biblioteki];
+
+--wywoływanie procedury np. za rok 2021
+EXECUTE Statystyka_wypożyczeń_za_okres '2021-01-01', '2021-12-31';
+GO
+
+--Procedura (2) Dodanie nowego czytelnika z walidacją unikalnego emaila
+
+GO
+CREATE PROCEDURE dodaj_czytelnika
+    @Imie VARCHAR(50),
+    @Nazwisko VARCHAR(50),
+    @Email VARCHAR(100),
+    @Telefon VARCHAR(15)
+AS
+BEGIN
+    -- Sprawdzenie, czy email już istnieje
+    IF EXISTS (SELECT 1
+    FROM czytelnik
+    WHERE Email = @Email)
+    BEGIN
+        PRINT 'Czytelnik z podanym adresem email już istnieje.';
+    END
+    ELSE
+    BEGIN
+        -- Dodanie nowego czytelnika
+        INSERT INTO czytelnik
+            (Imię, Nazwisko, Email, Telefon, Data_rejestracji)
+        VALUES
+            (@Imie, @Nazwisko, @Email, @Telefon, GETDATE());
+
+        PRINT 'Nowy czytelnik został pomyślnie dodany.';
+    END
+END;
+
+--dodanie nowego uzytkownika
+EXEC dodaj_czytelnika 
+    @Imie = 'Jan',
+    @Nazwisko = 'Kowalski',
+    @Email = 'jan.kowalski@example.com',
+    @Telefon = '123456789'
+
+--jesli mail juz istnieje 
+EXEC dodaj_czytelnika 
+    @Imie = 'Jan',
+    @Nazwisko = 'Kowalski',
+    @Email = 'jan.kowalski@example.com',
+    @Telefon = '123456789'
+GO
+
+--Procedura (3) Sprawdzanie, czy książka jest wypożyczona
+
+DECLARE @Tytuł NVARCHAR(255);
+DECLARE @Autor NVARCHAR(255);
+GO
+CREATE PROCEDURE Sprawdź_Dostępność_Książki
+    @Tytuł NVARCHAR(255),
+    @Autor NVARCHAR(255)
+AS
+BEGIN
+    IF EXISTS (
+        SELECT 1
+    FROM [dbo].[Książka] K
+        JOIN [dbo].[Egzemplarz] E
+        ON K.[Książka_ID] = E.[Książka_ID]
+        LEFT JOIN [dbo].[Wypożyczenie] W
+        ON W.[Egzemplarz_ID] = E.[Egzemplarz_ID]
+            AND W.[Data_zwrotu] IS NULL
+    WHERE K.[Tytuł] = @Tytuł AND K.[Autor] = @Autor AND W.[Wypożyczenie_ID] IS NULL
+    )
+BEGIN
+        SELECT DISTINCT
+            B.[Biblioteka_ID], B.[Nazwa_biblioteki], K.[Tytuł], K.[Autor]
+        FROM [dbo].[Książka] K
+            JOIN [dbo].[Egzemplarz] E
+            ON K.[Książka_ID] = E.[Książka_ID]
+            LEFT JOIN [dbo].[Wypożyczenie] W
+            ON W.[Egzemplarz_ID] = E.[Egzemplarz_ID]
+                AND W.[Data_zwrotu] IS NULL
+            JOIN [dbo].[Biblioteka] B
+            ON B.[Biblioteka_ID] = E.[Biblioteka_ID]
+        WHERE K.[Tytuł] = @Tytuł AND K.[Autor] = @Autor AND W.[Wypożyczenie_ID] IS NULL
+    END
+    ELSE
+    BEGIN
+        PRINT 'Niestety, wszystkie egzemplarze tej książki są w tej chwili niedostępne.'
+    END
+END;
+GO
+--wywoływanie procedury
+--Egzemplarz jest dostępny
+EXECUTE Sprawdź_Dostępność_Książki
+    @Tytuł = 'Gra o tron',
+    @Autor = 'George R.R. Martin'
+
+--wszystkie egzemplarze są wypożyczone
+EXECUTE Sprawdź_Dostępność_Książki
+    @Tytuł = 'Lalka',
+    @Autor = 'Bolesław Prus'
+
+
+--WIDOK
+
+--Widok (1)
+GO
+CREATE VIEW Ranking_najczęściej_wypożyczanych_gatunków
+AS
+    SELECT
+        COUNT(*) AS ilość_wypożyczonych_książek,
+        [Nazwa_gatunku]
+    FROM
+        [dbo].[Wypożyczenie] w
+        JOIN [dbo].[Książka] k ON k.[Książka_ID] = w.[Książka_ID]
+        JOIN [dbo].[Gatunek_Książki] g ON g.[Gatunek_ID] = k.[Gatunek_ID]
+    GROUP BY 
+    k.[Gatunek_ID], [Nazwa_gatunku];
+GO
+--wywoływanie widoku
+SELECT *
+FROM Ranking_najczęściej_wypożyczanych_gatunków
+ORDER BY 1 DESC;
+
+--Widok (2)
+GO
+CREATE VIEW Pracownik_z_największą_ilością_transakcji
+AS
+    WITH
+        IlośćTransakcji
+        AS
+        (
+            SELECT
+                w.[Pracownik_ID],
+                COUNT(*) AS ilość_transakcji
+            FROM [dbo].[Wypożyczenie] w
+            GROUP BY w.[Pracownik_ID]
+        )
+    SELECT
+        p.[Imię] + ' ' + p.[Nazwisko] AS 'Imię i nazwisko',
+        t.ilość_transakcji
+    FROM IlośćTransakcji t
+        JOIN [dbo].[Pracownicy] p
+        ON p.[Pracownik_ID] = t.[Pracownik_ID]
+    WHERE t.ilość_transakcji = (
+        SELECT MAX(ilość_transakcji)
+    FROM IlośćTransakcji
+);
+GO
+--wywoływanie widoku
+SELECT *
+FROM Pracownik_z_największą_ilością_transakcji;
+
+
+--Widok (3)
+--Książka wypożyczona przez największą ilość czytelników
+GO
+CREATE VIEW Najczęściej_wypożyczona_książka
+AS
+    SELECT k.[Książka_ID], k.[Tytuł], COUNT(w.[Wypożyczenie_ID]) AS Ilość_Wypożyczeń
+    FROM [dbo].[Książka] k
+        JOIN [dbo].[Wypożyczenie] w ON k.[Książka_ID] = w.[Książka_ID]
+    GROUP BY k.[Książka_ID], k.[Tytuł]
+    HAVING COUNT(w.[Wypożyczenie_ID]) = (
+    SELECT MAX(Ilość_Wypożyczeń)
+    FROM (
+        SELECT COUNT(w2.[Wypożyczenie_ID]) AS Ilość_Wypożyczeń
+        FROM [dbo].[Wypożyczenie] w2
+        GROUP BY w2.[Książka_ID]
+    ) AS Subquery
+);
+GO
+--wywoływanie widoku
+SELECT *
+FROM Najczęściej_wypożyczona_książka
+
+
+--WYZWALACZ
+
+--Wyzalacz (1) Podnoszenie ceny do 10 PLN (jezeli pozycja była tańsza, to cena została podniesiona do 10 zł)
+GO
+CREATE TRIGGER korekta_ceny
+ON Książka
+INSTEAD OF INSERT
+AS
+BEGIN
+    INSERT INTO Książka
+        (Książka_ID, Tytuł, Autor, Gatunek_ID, Rok_wydania, Biblioteka_ID, Cena)
+    SELECT
+        Książka_ID,
+        Tytuł,
+        Autor,
+        Gatunek_ID,
+        Rok_wydania,
+        Biblioteka_ID,
+        CASE 
+            WHEN Cena < 10 THEN 10
+            ELSE Cena
+        END AS Cena
+    FROM INSERTED;
+END;
+GO
+--Test
+
+SET IDENTITY_INSERT Książka ON;
+
+INSERT INTO Książka
+    (Książka_ID, Tytuł, Autor, Gatunek_ID, Rok_wydania, Biblioteka_ID, Cena)
+VALUES
+    (81, 'Przykładowa książka', 'Autor', 1, 2023, 1, 9);
+
+select *
+from Książka
+
+SET IDENTITY_INSERT Książka OFF;
+
+--Wyzwalacz (2) Automatyczne zwroty
+GO
+CREATE TRIGGER automatyczne_uzupełnianie_zwrotu
+ON Wypożyczenie
+
+AFTER UPDATE 
+AS 
+BEGIN
+    UPDATE Wypożyczenie
+    SET Data_zwrotu = GETDATE()
+    FROM Wypożyczenie w
+        JOIN Inserted i
+        ON w.Wypożyczenie_ID = i.Wypożyczenie_ID
+    WHERE i.Data_zwrotu IS NULL;
+END;
+ GO
+--Test
+
+UPDATE Wypożyczenie
+SET Czytelnik_ID = 8
+WHERE Wypożyczenie_ID = 59;
+
+
+--Wyzwalacz (3)
+
+ALTER TABLE Egzemplarz
+ADD Dostępność VARCHAR(20) DEFAULT 'Dostępny';
+
+GO
+CREATE TRIGGER Status_wypozyczenia_egzemplarza
+ON Wypożyczenie
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Oznacz egzemplarz jako niedostępny po wypożyczeniu (tylko dla nowych wypożyczeń)
+    UPDATE Egzemplarz
+    SET Dostępność = 'Niedostępny'
+    WHERE Egzemplarz_ID IN (
+        SELECT Egzemplarz_ID
+    FROM INSERTED
+    WHERE Data_zwrotu IS NULL
+    );
+
+    -- Oznacz egzemplarz jako dostępny po zwrocie (jeśli Data_zwrotu nie jest NULL)
+    UPDATE Egzemplarz
+    SET Dostępność = 'Dostępny'
+    WHERE Egzemplarz_ID IN (
+        SELECT Egzemplarz_ID
+    FROM INSERTED
+    WHERE Data_zwrotu IS NOT NULL
+    );
+
+END;
+GO
+
+-- Test - po zaktualizowaniu daty zwrotu egzemplarz zacznie być widoczny jako dostępny 
+
+UPDATE Wypożyczenie
+SET Czytelnik_ID = 11
+WHERE Wypożyczenie_ID = 58;
+
+
+SELECT *
+FROM [dbo].[Wypożyczenie]
+
+SELECT *
+FROM Egzemplarz
+WHERE Egzemplarz_ID = 60;
+
+
+
+
+
+
+
+
+
+
+
+
+
