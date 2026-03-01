@@ -6,6 +6,7 @@ Celem projektu było stworzenie kompletnego systemu zarządzania biblioteką z u
   - przygotowania zapytań analitycznych wspierających raportowanie.
 
 Zaimplementowana logika biznesowa
+
 **1. Funkcje**
 Funkcja obliczająca średnią długość wypożyczenia.
 Funkcja "oblicz_kare" naliczająca karę za przetrzymanie książki (po 30 dniach, 1% ceny książki za każdy dzień opóźnienia).
